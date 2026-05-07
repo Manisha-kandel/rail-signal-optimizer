@@ -1,0 +1,12 @@
+pydantic>=2.0
+confluent-kafka
+streamlit>=1.35
+plotly
+pandas
+numpy
+gymnasium
+stable-baselines3
+torch
+onnx
+databricks-sql-connector
+python-dotenv
