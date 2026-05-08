@@ -1,7 +1,5 @@
 import time
 import random
-import json
-from typing import List
 from simulator.train_event import TrainEvent, BlockAhead
 
 BLOCKS = [f"B_{i:03d}" for i in range(1, 21)]
@@ -14,13 +12,13 @@ class TrainState:
         self.speed_mph = random.uniform(45, 70)
         self.schedule_adherence_sec = 0.0
 
-def compute_signal(block_idx: int, all_states: List[TrainState]) -> str:
+def compute_signal(block_idx: int, all_states: list[TrainState]) -> str:
     occupied_indices = {s.block_idx for s in all_states}
     if (block_idx + 1) in occupied_indices:
         return "stop" if block_idx in occupied_indices else "approach"
     return "clear"
 
-def simulate_step(states: List[TrainState]) -> List[TrainEvent]:
+def simulate_step(states: list[TrainState]) -> list[TrainEvent]:
     occupied = {s.block_idx: s.train_id for s in states}
     events = []
 

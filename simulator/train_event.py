@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
-from typing import Optional, List
-from datetime import datetime
+# from typing import Optional, List
+from datetime import datetime, timezone
 import uuid
 
 class BlockAhead(BaseModel):
@@ -11,7 +11,7 @@ class BlockAhead(BaseModel):
 class TrainEvent(BaseModel):
     event_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     timestamp_utc: str = Field(
-        default_factory=lambda: datetime.utcnow().isoformat()
+        default_factory=lambda: datetime.now(timezone.utc).isoformat()
     )
     train_id: str
     block_id: str
@@ -20,8 +20,8 @@ class TrainEvent(BaseModel):
     current_speed_mph: float
     max_authorized_speed_mph: float = 79.0
     gross_tonnage: int = 18400
-    signal_aspect_ahead: str  # "clear", "approach", "stop"
-    blocks_ahead_occupied: List[BlockAhead] = []
+    signal_aspect_ahead: str  = "clear"  #, "approach", "stop"
+    blocks_ahead_occupied: list[BlockAhead] = []
     schedule_adherence_sec: float  # negative = late
     track_grade_pct: float = 0.0
     

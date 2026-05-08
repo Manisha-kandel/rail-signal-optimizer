@@ -7,3 +7,5 @@ pipelines/checkpoints/
 *.egg-info/
 dist/
 .DS_Store
+venv/ 
+CLAUDE.md

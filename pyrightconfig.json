@@ -1,0 +1,7 @@
+{
+  "include": ["."],
+  "exclude": ["venv"],
+  "pythonVersion": "3.14",
+  "venvPath": ".",
+  "venv": "venv"
+}
