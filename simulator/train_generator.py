@@ -14,8 +14,10 @@ class TrainState:
 
 def compute_signal(block_idx: int, all_states: list[TrainState]) -> str:
     occupied_indices = {s.block_idx for s in all_states}
-    if (block_idx + 1) in occupied_indices:
-        return "stop" if block_idx in occupied_indices else "approach"
+    if (block_idx + 1) % len(BLOCKS) in occupied_indices:
+        return "stop"
+    elif (block_idx + 2) % len(BLOCKS) in occupied_indices:
+        return "approach"
     return "clear"
 
 def simulate_step(states: list[TrainState]) -> list[TrainEvent]:
@@ -33,7 +35,7 @@ def simulate_step(states: list[TrainState]) -> list[TrainEvent]:
         else:
             s.speed_mph = min(79, s.speed_mph + random.uniform(1, 4))
             if random.random() > 0.5:
-                s.block_idx = min(s.block_idx + 1, len(BLOCKS) - 1)
+                s.block_idx = (s.block_idx + 1) % len(BLOCKS)
 
         s.schedule_adherence_sec += random.uniform(-8, 3)
 
