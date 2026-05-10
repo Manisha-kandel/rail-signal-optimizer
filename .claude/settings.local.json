@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(.venv/Scripts/python.exe -c \"import confluent_kafka; print\\(confluent_kafka.__version__\\)\")",
+      "Bash(venv/Scripts/python.exe -c \"import confluent_kafka; print\\(confluent_kafka.__version__\\)\")"
+    ]
+  }
+}
