@@ -2,7 +2,7 @@ __pycache__/
 *.pyc
 .env
 models/artifacts/
-pipelines/checkpoints/
+data/
 .streamlit/secrets.toml
 *.egg-info/
 dist/

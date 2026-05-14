@@ -10,3 +10,5 @@ torch
 onnx
 databricks-sql-connector
 python-dotenv
+pyspark==3.5.3
+delta-spark==3.2.0
