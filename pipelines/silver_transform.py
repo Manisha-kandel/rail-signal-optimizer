@@ -8,12 +8,14 @@ os.environ.setdefault("PYSPARK_PYTHON", sys.executable)
 os.environ.setdefault("PYSPARK_DRIVER_PYTHON", sys.executable)
 
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, to_timestamp
+from pyspark.sql.functions import col, to_timestamp, window, last
 from delta import configure_spark_with_delta_pip
 
-BRONZE_PATH = "./data/bronze/train_events"
-SILVER_PATH = "./data/silver/train_events"
-CHECKPOINT  = "./data/checkpoints/silver"
+BRONZE_PATH    = "./data/bronze/train_events"
+SILVER_PATH    = "./data/silver/train_events"
+OCCUPANCY_PATH = "./data/silver/block_occupancy"
+CHECKPOINT     = "./data/checkpoints/silver"
+CHECKPOINT_OCC = "./data/checkpoints/silver_occupancy"
 
 
 def build_session() -> SparkSession:
@@ -63,7 +65,8 @@ def run() -> None:
         )
     )
 
-    query = (
+    # ── Query 1: validated Silver events (append) ─────────────────
+    query1 = (
         silver.writeStream
         .format("delta")
         .outputMode("append")
@@ -71,9 +74,49 @@ def run() -> None:
         .start(SILVER_PATH)
     )
 
+    # ── Query 2: stateful block occupancy state (update) ───────────
+    # 30s sliding window, 10s slide — latest position per train
+    occupancy = (
+        silver
+        .groupBy(
+            window(col("event_time"), "30 seconds", "10 seconds"),
+            col("train_id"),
+        )
+        .agg(
+            last("block_id").alias("block_id"),
+            last("block_idx").alias("block_idx"),
+            last("signal_aspect_ahead").alias("signal_aspect"),
+            last("current_speed_mph").alias("speed_mph"),
+            last("schedule_adherence_sec").alias("schedule_adherence_sec"),
+            last("track_grade_pct").alias("track_grade_pct"),
+        )
+        .select(
+            col("window.start").alias("window_start"),
+            col("window.end").alias("window_end"),
+            col("train_id"),
+            col("block_id"),
+            col("block_idx"),
+            col("signal_aspect"),
+            col("speed_mph"),
+            col("schedule_adherence_sec"),
+            col("track_grade_pct"),
+        )
+    )
+
+    query2 = (
+        occupancy.writeStream
+        .format("delta")
+        .outputMode("complete")
+        .option("checkpointLocation", CHECKPOINT_OCC)
+        .start(OCCUPANCY_PATH)
+    )
+
     print(f"Silver transform running: Bronze → {SILVER_PATH}")
+    print(f"Block occupancy state  : Silver → {OCCUPANCY_PATH}")
     print("Ctrl+C to stop.\n")
-    query.awaitTermination()
+
+    query2.awaitTermination()
+    query1.awaitTermination()
 
 
 if __name__ == "__main__":
