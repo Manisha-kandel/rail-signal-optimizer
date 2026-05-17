@@ -47,7 +47,7 @@ TRAIN_EVENT_SCHEMA = StructType([
 def build_session() -> SparkSession:
     builder = (
         SparkSession.builder
-        .appName("RailSignal-Bronze")
+        .appName("RailSignal-Bronze")  # type: ignore[attr-defined]
         .master("local[*]")
         .config("spark.sql.extensions",
                 "io.delta.sql.DeltaSparkSessionExtension")

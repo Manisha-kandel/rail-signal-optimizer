@@ -21,7 +21,7 @@ CHECKPOINT_OCC = "./data/checkpoints/silver_occupancy"
 def build_session() -> SparkSession:
     builder = (
         SparkSession.builder  # type: ignore[attr-defined]
-        .appName("RailSignal-Silver")
+        .appName("RailSignal-Silver")  # type: ignore[attr-defined]
         .master("local[*]")
         .config("spark.sql.extensions",
                 "io.delta.sql.DeltaSparkSessionExtension")

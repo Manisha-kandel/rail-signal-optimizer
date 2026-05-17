@@ -83,8 +83,8 @@ The simulator replicates **absolute block signaling** on the Harrisburg Subdivis
 | Week | Focus | Status |
 |---|---|---|
 | Week 1 (May 7–13) | Skeleton · Simulator · Kafka · Streamlit live feed | ✅ Complete |
-| Week 2 (May 14–19) | Spark Bronze → Silver → Gold pipeline | 🔄 In progress |
-| Week 3 (May 20–26) | Gymnasium env · PPO training · ONNX → Spark UDF | ⬜ Planned |
+| Week 2 (May 14–19) | Spark Bronze → Silver → Gold pipeline | ✅ Complete |
+| Week 3 (May 20–26) | Gymnasium env · PPO training · ONNX → Spark UDF | 🔄 In progress |
 | Week 4 (May 27–Jun 3) | Dashboard rebuild from Gold · Marey diagram · deploy | ⬜ Planned |
 
 ---
