@@ -8,6 +8,8 @@ gymnasium
 stable-baselines3
 torch
 onnx
+onnxruntime
+onnxscript
 databricks-sql-connector
 python-dotenv
 pyspark==3.5.3
