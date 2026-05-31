@@ -2,7 +2,10 @@ __pycache__/
 *.pyc
 .env
 models/artifacts/
-data/
+data/bronze/
+data/silver/
+data/gold/
+data/checkpoints/
 .streamlit/secrets.toml
 *.egg-info/
 dist/
